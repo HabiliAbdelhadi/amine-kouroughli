@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Sediment Analysis Form</title>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/noUiSlider/15.7.1/nouislider.min.css"
+    />
+    <link rel="stylesheet" href="index.css" />
+  </head>
+  <body>
+    <div class="container">
+      <div class="form-wrapper">
+        <h1 style="margin-bottom: 3rem;">Prediction Of Monomedia Filtration Performance</h1>
+        <!-- <p class="subtitle">Enter the sediment characteristics for analysis</p> -->
+
+        <form id="sedimentForm" class="form">
+          <div class="form-row">
+            <div class="form-group">
+              <label for="media">Media</label>
+              <div class="input-wrapper">
+                <input
+                  type="text"
+                  id="media"
+                  name="media"
+                  placeholder="Enter media type"
+                  required
+                />
+              </div>
+              <span class="error-message" id="mediaError"></span>
+            </div>
+            
+            <div class="form-group">
+              <label for="porosity">Porosity (ρ)</label>
+              <div class="input-wrapper">
+                <input
+                  type="number"
+                  id="porosity"
+                  name="porosity"
+                  step="0.01"
+                  min="0"
+                  max="1"
+                  required
+                />
+                <span class="unit">ratio</span>
+              </div>
+              <span class="error-message" id="porosityError"></span>
+            </div>
+          </div>
+          
+          <div class="form-row">
+            <div class="form-group">
+              <label for="density">Density</label>
+              <div class="input-wrapper">
+                <input
+                  type="number"
+                  id="density"
+                  name="density"
+                  step="0.01"
+                  min="0"
+                  placeholder="Enter density value"
+                  required
+                />
+                <span class="unit">kg/l</span>
+              </div>
+              <span class="error-message" id="densityError"></span>
+            </div>
+            
+            <div class="form-group">
+              <label for="bedDepth">Bed Depth (h)</label>
+              <div class="input-wrapper">
+                <input
+                  type="number"
+                  id="bedDepth"
+                  name="bedDepth"
+                  step="0.1"
+                  min="0"
+                  required
+                />
+                <span class="unit">cm</span>
+              </div>
+              <span class="error-message" id="bedDepthError"></span>
+            </div>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group readonly">
+              <label for="flowRate">Flow Rate</label>
+              <div class="input-wrapper">
+                <input
+                  type="number"
+                  id="flowRate"
+                  name="flowRate"
+                  value="0.25"
+                  readonly
+                />
+                <span class="unit">l/h</span>
+              </div>
+            </div>
+
+            <div class="form-group readonly">
+              <label for="influentTurbidity">Influent Turbidity</label>
+              <div class="input-wrapper">
+                <input
+                  type="number"
+                  id="influentTurbidity"
+                  name="influentTurbidity"
+                  value="150"
+                  readonly
+                />
+                <span class="unit">NTU</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="form-group full-width">
+            <label>Grain Size Range</label>
+            <div class="dual-slider-wrapper">
+              <div id="grainSizeSlider" class="dual-slider"></div>
+              <div class="slider-values">
+                <div class="value-display">
+                  <span class="value-label">Min:</span>
+                  <span id="grainSizeMinValue">0.2</span>
+                  <span class="unit">mm</span>
+                </div>
+                <div class="value-display">
+                  <span class="value-label">Max:</span>
+                  <span id="grainSizeMaxValue">1.0</span>
+                  <span class="unit">mm</span>
+                </div>
+              </div>
+            </div>
+            <span class="error-message" id="grainSizeError"></span>
+          </div>
+
+          <button type="submit" class="submit-btn">
+            <span>Analyze Sediment</span>
+            <svg
+              class="icon"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+            >
+              <path d="M5 12h14m-7-7l7 7-7 7" />
+            </svg>
+          </button>
+        </form>
+      </div>
+    </div>
+
+    <!-- Grain Shape Modal -->
+    <div id="grainShapeModal" class="modal" style="display: none;">
+      <div class="modal-content">
+        <h2>Grain Shape Selection</h2>
+        <p>Please select the grain shape for your analysis:</p>
+        <div class="grain-shape-buttons">
+          <button type="button" id="sphereBtn" class="grain-shape-btn">
+            <div class="shape-icon sphere"></div>
+            <span>Sphere</span>
+          </button>
+          <button type="button" id="nonSphereBtn" class="grain-shape-btn">
+            <div class="shape-icon non-sphere"></div>
+            <span>Non-Sphere</span>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Results Modal -->
+    <div id="resultsModal" class="modal" style="display: none;">
+      <div class="modal-content results-modal">
+      
+        <div class="results-content">
+          <div class="parameters">
+            <h3>Analysis Parameters</h3>
+            <div class="param-grid">
+              <!-- Parameters will be populated by JavaScript -->
+            </div>
+          </div>
+          <div class="graph-container">
+            <h3>Graph Visualization</h3>
+            <div class="graph-info">
+              <div class="graph-param-grid">
+                <div class="graph-param-item">
+                  <span class="graph-param-label">Flow Rate:</span>
+                  <span id="resultFlowRate" class="graph-param-value">0.25 l/h</span>
+                </div>
+                <div class="graph-param-item">
+                  <span class="graph-param-label">Influent Turbidity:</span>
+                  <span id="resultInfluentTurbidity" class="graph-param-value">150 NTU</span>
+                </div>
+                <div class="graph-param-item">
+                  <span class="graph-param-label">Calculated Time:</span>
+                  <span id="resultCalculatedTime" class="graph-param-value">-- h</span>
+                </div>
+              </div>
+              <div class="equation">
+                <strong id="equationText">Equation: y = a - b × c<sup>x</sup></strong>
+              </div>
+            </div>
+            <canvas id="resultGraph" width="600" height="400"></canvas>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/noUiSlider/15.7.1/nouislider.min.js"></script>
+    <script type="module" src="index.js"></script>
+  </body>
+</html>
