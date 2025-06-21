@@ -233,11 +233,11 @@ document.addEventListener("DOMContentLoaded", function () {
       `;
 
       // Update equation with real values
-      equationText.innerHTML = `Equation: y = ${calculationResult.a.toFixed(
+      equationText.innerHTML = `Model Equation: η = ${calculationResult.a.toFixed(
         3
       )} - ${calculationResult.b.toFixed(3)} × ${calculationResult.c.toFixed(
         3
-      )}<sup>x</sup>`;
+      )}<sup>t</sup>`;
 
       // Update calculated time display
       resultCalculatedTime.textContent = `${calculatedTime.toFixed(2)} h`;
@@ -261,7 +261,7 @@ document.addEventListener("DOMContentLoaded", function () {
       console.log("a =", calculationResult.a);
       console.log("b =", calculationResult.b);
       console.log("c =", calculationResult.c);
-      console.log("Equation: y = a - b × c^x");
+      console.log("Model Equation: y = a - b × c^x");
       console.log("=====================================");
     }
   }
